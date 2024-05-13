@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuarios</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
+
 <body>
     <h1>Información de Usuarios</h1>
     <table border="1">
@@ -22,17 +24,18 @@
         </tr>
         {% for user in users %}
         <tr>
-            <td>{{ user.name }}</td>
-            <td>{{ user.Telefono.phone if user.Telefono else 'No disponible' }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.Dispositivo }}</td>
-            <td>{{ user.Subcripcion.estado }}</td>
+            <td>{{ user['name'] }}</td>
+            <td>{{ user['Telefono'] }}</td>
+            <td>{{ user['email'] }}</td>
+            <td>{{ user['Dispositivo'] }}</td>
+            <td>{{ user['Subcripcion'] }}</td>
             <td>{{ user['Fecha de Contratacion'] }}</td>
-            <td>{{ user.meses }}</td>
-            <td>{{ user['Fecha de expiracion'] }}</td>
-            <td>{{ user.Precio }}</td>
+            <td>{{ user['meses'] }}</td>
+            <td>{{ user['Fecha de expiracion'] if user['Fecha de expiracion'] else 'N/A' }}</td>
+            <td>{{ user['Precio'] if user['Precio'] else 'N/A' }}</td>
         </tr>
         {% endfor %}
     </table>
 </body>
+
 </html>
