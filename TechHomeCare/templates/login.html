@@ -11,7 +11,7 @@
         <label for="nombre_usuario">Nombre de usuario:</label>
         <input type="text" id="nombre_usuario" name="nombre_usuario" required><br><br>
         <label for="contraseña">Contraseña:</label>
-        <input type="password" id="contraseña" name="contraseña" required><br><br>
+        <input type="password" id="password" name="password" required><br><br>
         <button type="submit">Iniciar sesión</button>
     </form>
 
@@ -23,23 +23,31 @@
             event.preventDefault(); // Evitar el envío del formulario por defecto
 
             // Obtener los datos del formulario
-            var nombreUsuario = document.getElementById("nombre_usuario").value;
-            var contraseña = document.getElementById("contraseña").value;
-
+            //var nombreUsuario = document.getElementById("nombre_usuario").value;
+            //var contraseña = document.getElementById("contraseña").value;
+            var formData = new FormData();
+            formData.append('nombre_usuario', nombreUsuario);
+            formData.append('password', password);
             // Crear un objeto con los datos del usuario
-            var usuario = {
+            /*var usuario = {
                 nombre_usuario: nombreUsuario,
                 contraseña: contraseña
             };
+            */
+           fetch('/login', {
+                method: 'POST',
+                body: formData
+            })
 
             // Enviar los datos del usuario al backend usando fetch
-            fetch('/login', {
+            /*fetch('/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(usuario)
             })
+            */
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al iniciar sesión');
