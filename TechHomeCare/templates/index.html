@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Información de Usuarios</h1>
+    <table border="1">
+        <tr>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Dispositivo</th>
+            <th>Subscripción</th>
+            <th>Fecha de Contratación</th>
+            <th>Meses</th>
+            <th>Fecha de Expiración</th>
+            <th>Precio</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.name }}</td>
+            <td>{{ user.Telefono.phone if user.Telefono else 'No disponible' }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.Dispositivo }}</td>
+            <td>{{ user.Subcripcion.estado }}</td>
+            <td>{{ user['Fecha de Contratacion'] }}</td>
+            <td>{{ user.meses }}</td>
+            <td>{{ user['Fecha de expiracion'] }}</td>
+            <td>{{ user.Precio }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
