@@ -1,82 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuarios</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-    <script>
-        function addDays(dateStr, days) {
-            console.log(`Adding days: Date: ${dateStr}, Days: ${days}`);
-            const date = new Date(dateStr);
-            date.setDate(date.getDate() + days);
-            return date.toISOString().split('T')[0];
-        }
-
-        function multiply(x, y) {
-            console.log(`Multiplying: ${x} * ${y}`);
-            return x * y;
-        }
-
-        function evaluateFormulas() {
-            console.log("Evaluating formulas for each user row...");
-            const rows = document.querySelectorAll('tr.user-row');
-            for (let i = 0; i < rows.length; i++) {
-                console.log(`Processing row ${i + 1}`);
-                const row = rows[i];
-                const fechaContratacion = row.querySelector('.fecha-contratacion').textContent;
-                const meses = parseInt(row.querySelector('.meses').textContent, 10);
-                const subcripcion = row.querySelector('.subcripcion').textContent;
-
-                console.log(`Fecha Contratacion: ${fechaContratacion}, Meses: ${meses}, Subcripcion: ${subcripcion}`);
-
-                const fechaExpiracionCell = row.querySelector('.fecha-expiracion');
-                const daysToAdd = multiply(meses, 30);
-                fechaExpiracionCell.textContent = addDays(fechaContratacion, daysToAdd);
-
-                const precioCell = row.querySelector('.precio');
-                const precio = subcripcion === "Alta" ? multiply(meses, 9.99).toFixed(2) : "0";
-                precioCell.textContent = precio;
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log("DOM fully loaded and parsed");
-            evaluateFormulas();
-        });
-    </script>
-
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+    <script src="{{url_for('static', filename='index.js')}}"></script>
 </head>
 
 <body>
-    <h1>Información de Usuarios</h1>
-    <table border="1">
-        <tr>
-            <th>Nombre</th>
-            <th>Teléfono</th>
-            <th>Email</th>
-            <th>Dispositivo</th>
-            <th>Subscripción</th>
-            <th>Fecha de Contratación</th>
-            <th>Meses</th>
-            <th>Fecha de Expiración</th>
-            <th>Precio</th>
-        </tr>
+    <div class="container">
+        <h1>Información de Usuarios</h1>
         {% for user in users %}
-        <tr class="user-row">
-            <td>{{ user['name'] }}</td>
-            <td>{{ user['Telefono'] }}</td>
-            <td>{{ user['email'] }}</td>
-            <td>{{ user['Dispositivo'] }}</td>
-            <td class="subcripcion">{{ user['Subcripcion'] }}</td>
-            <td class="fecha-contratacion">{{ user['Fecha de Contratacion'] }}</td>
-            <td class="meses">{{ user['meses'] }}</td>
-            <td class="fecha-expiracion">{{ user['Fecha de expiracion'] if user['Fecha de expiracion'] else 'N/A' }}</td>
-            <td class="precio">{{ user['Precio'] if user['Precio'] else 'N/A' }}</td>
-        </tr>
+        <div class="user-card">
+            <div class="user-info">
+                <p><strong>Nombre:</strong> {{ user['name'] }}</p>
+                <p><strong>Teléfono:</strong> {{ user['Telefono'] }}</p>
+                <p><strong>Email:</strong> {{ user['email'] }}</p>
+                <p><strong>Dispositivo:</strong> {{ user['Dispositivo'] }}</p>
+                <p class="subcripcion"><strong>Subscripción:</strong> {{ user['Subcripcion'] }}</p>
+                <p class="fecha-contratacion"><strong>Fecha de Contratación:</strong> {{ user['Fecha de Contratacion']
+                    }}</p>
+                <p class="meses"><strong>Meses:</strong> {{ user['meses'] }}</p>
+                <p class="fecha-expiracion"><strong>Fecha de Expiración:</strong> {{ user['Fecha de expiracion'] if
+                    user['Fecha de expiracion'] else 'N/A' }}</p>
+                <p class="precio"><strong>Precio:</strong> {{ user['Precio'] if user['Precio'] else 'N/A' }}</p>
+            </div>
+            <button class="action-button" data-user-id="{{ user['id'] }}"
+                data-action="{{ 'unsubscribe' if user['Subcripcion'] == 'Alta' else 'subscribe' }}"
+                onclick="toggleSubscription(this)">
+                {{ 'Unsubscribe' if user['Subcripcion'] == 'Alta' else 'Subscribe' }}
+            </button>
+        </div>
         {% endfor %}
-    </table>
+    </div>
 </body>
 
 </html>
