@@ -43,8 +43,10 @@ def fetch_board_details(board_id):
     return response.json()
 
 
-def fetch_items(board_id):
-    """Fetches and formats all items from a specified board using items_page for pagination."""
+def fetch_items(board_id, username=None):
+    """Fetches and formats all items from a specified board using items_page for pagination.
+       If username is provided, it fetches only the data for that user.
+    """
     board_data = fetch_board_details(board_id)
     if "errors" in board_data:
         print("Error fetching board details:", board_data["errors"])
@@ -81,6 +83,8 @@ def fetch_items(board_id):
     formatted_rows = []
 
     for item in items:
+        if username and item["name"] != username:
+            continue
         row = {"id": item["id"], "name": item["name"]}
         for column in item["column_values"]:
             column_def = col_defs.get(column["id"], {})

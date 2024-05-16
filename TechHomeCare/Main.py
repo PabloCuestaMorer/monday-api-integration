@@ -6,6 +6,7 @@ from flask import (
     render_template,
     request,
     url_for,
+    json,
 )
 from MondayAPI import fetch_items
 
@@ -17,9 +18,8 @@ BOARD_ID = 1496686926
 def verificar_credenciales(nombre_usuario, password):
     for usuario in fetch_items(BOARD_ID):
         if usuario["name"] == nombre_usuario and usuario["Contraseña"] == password:
-            return True
-    return False
-
+            return usuario
+    return None
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -28,10 +28,12 @@ def login():
 
     print("el usuario recibido del form es: " + str(nombre_usuario))
 
-    if verificar_credenciales(nombre_usuario, password):
+    user_data = verificar_credenciales(nombre_usuario, password)
+    if user_data:
         # Credenciales válidas, crear una cookie de usuario autenticado y redirigir a la página principal
         respuesta = make_response(redirect(url_for("index")))
         respuesta.set_cookie("usuario_autenticado", nombre_usuario)
+        respuesta.set_cookie("user_data", json.dumps(user_data))  # Store user data in a cookie
         return respuesta
     else:
         # Credenciales inválidas, devolver un mensaje de error
@@ -41,13 +43,14 @@ def login():
 @app.route("/")
 def index():
     if "usuario_autenticado" in request.cookies:
-        # El usuario está autenticado, mostrar los datos de los usuarios
-        user_data = fetch_items(BOARD_ID)
+        # El usuario está autenticado, mostrar los datos del usuario autenticado
+        user_data = json.loads(request.cookies.get("user_data", "{}"))
 
-        return render_template("index.html", users=user_data)
+        return render_template("index.html", users=[user_data])  # Pass user data as a list
     else:
         # El usuario no está autenticado, redirigir al formulario de inicio de sesión
         return redirect(url_for("login_form"))
+
 
 
 @app.route("/login_form")
