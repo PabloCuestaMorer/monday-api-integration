@@ -2,6 +2,7 @@ import os
 import requests
 import json
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
 
 # Load environment variables
 load_dotenv()
@@ -43,10 +44,29 @@ def fetch_board_details(board_id):
     return response.json()
 
 
-def fetch_items(board_id, username=None):
-    """Fetches and formats all items from a specified board using items_page for pagination.
-       If username is provided, it fetches only the data for that user.
+def fetch_board_details(board_id):
+    """Fetches board details including column definitions."""
+    query = """
+        query ($boardIds: [ID!]) {
+            boards (ids: $boardIds) {
+                name
+                columns {
+                    id
+                    title
+                    type
+                    settings_str
+                }
+            }
+        }
     """
+    variables = json.dumps({"boardIds": [str(board_id)]})
+    data = {"query": query, "variables": variables}
+    response = requests.post(url=api_url, headers=headers, json=data)
+    return response.json()
+
+
+def fetch_items(board_id, username=None):
+    """Fetches and formats all items from a specified board using items_page for pagination."""
     board_data = fetch_board_details(board_id)
     if "errors" in board_data:
         print("Error fetching board details:", board_data["errors"])
@@ -88,7 +108,12 @@ def fetch_items(board_id, username=None):
         row = {"id": item["id"], "name": item["name"]}
         for column in item["column_values"]:
             column_def = col_defs.get(column["id"], {})
-            row[column_def.get("title", column["id"])] = column["text"]
+            if column_def["type"] == "formula":
+                # Instead of evaluating, insert the literal formula string
+                formula_str = json.loads(column_def["settings_str"]).get("formula", "")
+                row[column_def["title"]] = f"Formula: {formula_str}"
+            else:
+                row[column_def["title"]] = column["text"]
         formatted_rows.append(row)
 
     return formatted_rows
