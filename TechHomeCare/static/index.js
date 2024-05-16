@@ -39,11 +39,11 @@ function evaluateFormulas() {
         }
         
         const fechaContratacion = fechaContratacionElem.textContent.split(': ')[1];
-        const meses = parseInt(mesesElem.textContent.split(': ')[1], 10);
+        const meses = parseInt(mesesElem.value, 10);
         const subcripcion = subcripcionElem.textContent.split(': ')[1];
         
         if (isNaN(meses)) {
-            console.error(`Invalid months value: ${mesesElem.textContent}`);
+            console.error(`Invalid months value: ${mesesElem.value}`);
             continue;
         }
 
@@ -77,13 +77,19 @@ function evaluateFormulas() {
 document.addEventListener('DOMContentLoaded', function () {
     console.log("DOM fully loaded and parsed");
     evaluateFormulas();
+    
+    // Add event listeners for the dropdown changes
+    const dropdowns = document.querySelectorAll('.meses');
+    dropdowns.forEach(dropdown => {
+        dropdown.addEventListener('change', evaluateFormulas);
+    });
 });
 
 function toggleSubscription(button) {
     var userId = button.getAttribute('data-user-id');
     var action = button.getAttribute('data-action');
     console.log(`Toggling subscription for user ${userId}: ${action}`);
-    // Here AJAX request to the server to update the subscription status
+    // Here you would typically make an AJAX request to the server to update the subscription status
 
     // Toggle button class and action
     if (action === 'unsubscribe') {

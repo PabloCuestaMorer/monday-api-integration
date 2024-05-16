@@ -127,3 +127,30 @@ button:hover {
     width: fit-content;
     margin-top: 10px;
 }
+
+/* Styles for the dropdown (select) */
+.meses {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    padding: 4px 8px;
+    font-size: 16px;
+    color: #333;
+    margin: 4px 0;
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+.meses:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    outline: none;
+}
+
+.meses:hover {
+    border-color: #45a049;
+}

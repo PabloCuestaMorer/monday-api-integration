@@ -22,7 +22,13 @@
                 <p class="subcripcion"><strong>Subscripción:</strong> {{ user['Subcripcion'] }}</p>
                 <p class="fecha-contratacion"><strong>Fecha de Contratación:</strong> {{ user['Fecha de Contratacion']
                     }}</p>
-                <p class="meses"><strong>Meses:</strong> {{ user['meses'] }}</p>
+                <label for="meses-{{ user['id'] }}"><strong>Meses:</strong></label>
+                <select id="meses-{{ user['id'] }}" class="meses">
+                    <option value="0" {% if user['meses'] == 0 %}selected{% endif %}>0</option>
+                    <option value="3" {% if user['meses'] == 3 %}selected{% endif %}>3</option>
+                    <option value="6" {% if user['meses'] == 6 %}selected{% endif %}>6</option>
+                    <option value="12" {% if user['meses'] == 12 %}selected{% endif %}>12</option>
+                </select>
                 <p class="fecha-expiracion"><strong>Fecha de Expiración:</strong> {{ user['Fecha de expiracion'] if
                     user['Fecha de expiracion'] else 'N/A' }}</p>
                 <p class="precio"><strong>Precio:</strong> {{ user['Precio'] if user['Precio'] else 'N/A' }}</p>
