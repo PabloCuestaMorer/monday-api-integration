@@ -11,17 +11,17 @@
 
 <body>
     <div class="container">
-        <h1>Información de Usuarios</h1>
+        <h1>Suscripción TechHome Care</h1>
         {% for user in users %}
-        <div class="user-card">
+        <div class="user-card" data-user-id="{{ user['id'] }}">
             <div class="user-info">
                 <p><strong>Nombre:</strong> {{ user['name'] }}</p>
                 <p><strong>Teléfono:</strong> {{ user['Telefono'] }}</p>
                 <p><strong>Email:</strong> {{ user['email'] }}</p>
                 <p><strong>Dispositivo:</strong> {{ user['Dispositivo'] }}</p>
                 <p class="subcripcion"><strong>Subscripción:</strong> {{ user['Subcripcion'] }}</p>
-                <p class="fecha-contratacion"><strong>Fecha de Contratación:</strong> {{ user['Fecha de Contratacion']
-                    }}</p>
+                <p class="fecha-contratacion"><strong>Fecha de Contratación:</strong> {{ user['Fecha de Contratacion'] }}</p>
+                {% if user['Subcripcion'] != 'Baja' %}
                 <label for="meses-{{ user['id'] }}"><strong>Meses:</strong></label>
                 <select id="meses-{{ user['id'] }}" class="meses">
                     <option value="0" {% if user['meses'] == '0' %}selected{% endif %}>0</option>
@@ -29,9 +29,9 @@
                     <option value="6" {% if user['meses'] == '6' %}selected{% endif %}>6</option>
                     <option value="12" {% if user['meses'] == '12' %}selected{% endif %}>12</option>
                 </select>
-                <p class="fecha-expiracion"><strong>Fecha de Expiración:</strong> {{ user['Fecha de expiracion'] if
-                    user['Fecha de expiracion'] else 'N/A' }}</p>
+                <p class="fecha-expiracion"><strong>Fecha de Expiración:</strong> {{ user['Fecha de expiracion'] if user['Fecha de expiracion'] else 'N/A' }}</p>
                 <p class="precio"><strong>Precio:</strong> {{ user['Precio'] if user['Precio'] else 'N/A' }}</p>
+                {% endif %}
             </div>
             <button class="action-button" data-user-id="{{ user['id'] }}"
                 data-action="{{ 'unsubscribe' if user['Subcripcion'] == 'Alta' else 'subscribe' }}"

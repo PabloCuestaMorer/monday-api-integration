@@ -89,18 +89,40 @@ function toggleSubscription(button) {
     var userId = button.getAttribute('data-user-id');
     var action = button.getAttribute('data-action');
     console.log(`Toggling subscription for user ${userId}: ${action}`);
-    // Here you would typically make an AJAX request to the server to update the subscription status
 
-    // Toggle button class and action
-    if (action === 'unsubscribe') {
-        button.setAttribute('data-action', 'subscribe');
-        button.textContent = 'Subscribe';
-        button.classList.add('subscribe-button');
-        button.classList.remove('unsubscribe-button');
-    } else {
-        button.setAttribute('data-action', 'unsubscribe');
-        button.textContent = 'Unsubscribe';
-        button.classList.add('unsubscribe-button');
-        button.classList.remove('subscribe-button');
-    }
+    // Make an AJAX request to the server to update the subscription status
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/toggle_subscription', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log('Subscription status updated');
+
+            // Parse the response
+            var response = JSON.parse(xhr.responseText);
+
+            if (response.message) {
+                // Toggle button class and action
+                if (action === 'unsubscribe') {
+                    button.setAttribute('data-action', 'subscribe');
+                    button.textContent = 'Subscribe';
+                    button.classList.add('subscribe-button');
+                    button.classList.remove('unsubscribe-button');
+                } else {
+                    button.setAttribute('data-action', 'unsubscribe');
+                    button.textContent = 'Unsubscribe';
+                    button.classList.add('unsubscribe-button');
+                    button.classList.remove('subscribe-button');
+                }
+
+                // Reload the page to update the card data
+                location.reload();
+            } else {
+                console.error('Failed to update subscription status');
+            }
+        } else if (xhr.readyState == 4) {
+            console.error('Failed to update subscription status');
+        }
+    };
+    xhr.send(`user_id=${userId}&action=${action}`);
 }
