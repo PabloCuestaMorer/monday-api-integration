@@ -20,14 +20,10 @@
                     url: "/login",
                     data: formData,
                     success: function (response) {
-                        if (response.error) {
-                            alert(response.error);
-                        } else {
-                            window.location.href = '/'; // Redirect to the homepage on success
-                        }
+                         window.location.href = '/'; // Redirect to the homepage on success
                     },
                     error: function () {
-                        $('#mensajeError').text('Error en el servidor. Intente de nuevo más tarde.');
+                        $('#mensajeError').text('Usuario o contraseña incorrectos.');
                     }
                 });
             });
@@ -42,9 +38,10 @@
         <label for="password">Contraseña:</label>
         <input type="password" id="password" name="password" required><br><br>
         <button type="submit">Iniciar sesión</button>
+        <div id="mensajeError" style="color: red;"></div>
     </form>
 
-    <div id="mensajeError" style="color: red;"></div>
+    
 </body>
 
 </html>
