@@ -12,7 +12,7 @@ from MondayAPI import fetch_items, update_user_subscription, send_sms
 
 app = Flask(__name__)
 
-BOARD_ID = 1496686926
+BOARD_ID = 1510653193
 
 
 def verificar_credenciales(nombre_usuario, password):
